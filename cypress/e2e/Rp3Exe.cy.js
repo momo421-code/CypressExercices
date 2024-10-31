@@ -2,7 +2,7 @@
 
 describe("Exercice1", () => {
   it("Scenario1", () => {
-    cy.visit("https://www.saucedemo.com");
+    cy.visit("/");
     cy.get('[data-test="username"]')
       .type("standard_user")
       .should("have.value", "standard_user");
@@ -13,7 +13,7 @@ describe("Exercice1", () => {
     cy.url().should("include", "/inventory.html");
   });
   it("Scenario2", () => {
-    cy.visit("https://www.saucedemo.com");
+    cy.visit("/");
     cy.get('[data-test="username"]').type("standard_use");
     cy.get('[data-test="password"]').type("secret_sauc");
     cy.get('[data-test="login-button"]').click();
@@ -24,7 +24,7 @@ describe("Exercice1", () => {
 });
 
 describe("Exercice2", () => {
-  it.only("Scenario1", () => {
+  it("Scenario1", () => {
     cy.visit("https://practice.automationtesteracademy.com");
     cy.get('[data-test="logo-img"]').should("be.visible");
     cy.get('[data-test="username-login"]')
@@ -36,5 +36,22 @@ describe("Exercice2", () => {
     cy.get('[data-test="submit-login"]').click();
     cy.get('[data-test="p-contact"]').should("contain", "Contactez nous!");
     cy.get(".grid-container img").should("have.length", 8);
+    cy.get(".card-container").first();
+    cy.get(".card-container").eq(2).find("[data-test=consulter-btn]").click();
+  });
+
+  it("Scenario2", () => {
+    cy.visit("https://practice.automationtesteracademy.com");
+    cy.get('[data-test="logo-img"]').should("be.visible");
+    cy.get('[data-test="username-login"]').type("login_use");
+    cy.get('[data-test="password-login"]')
+      .type("cypress-geek")
+      .should("have.value", "cypress-geek");
+
+    cy.get('[data-test="submit-login"]').click();
+    cy.get(".error-message").should(
+      "contain.text",
+      "Veuillez vérifier votre nom"
+    );
   });
 });
