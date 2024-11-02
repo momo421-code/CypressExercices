@@ -23,3 +23,28 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("login", (username, password) => {
+  cy.visit("/");
+  cy.get('[data-test="username"]')
+    .type(username)
+    .should("have.value", username);
+  cy.get('[data-test="password"]')
+    .type(password)
+    .should("have.value", password);
+  cy.get('[data-test="login-button"]').click();
+});
+
+Cypress.Commands.add("userForm", (firstName, lastName, postalCode) => {
+  cy.get('[data-test="firstName"]')
+    .type(firstName)
+    .should("have.value", firstName);
+  cy.get('[data-test="lastName"]')
+    .type(lastName)
+    .should("have.value", lastName);
+  cy.get('[data-test="postalCode"]')
+    .type(postalCode)
+    .should("have.value", postalCode);
+
+  cy.get('[data-test="continue"]').should("be.visible").click();
+});

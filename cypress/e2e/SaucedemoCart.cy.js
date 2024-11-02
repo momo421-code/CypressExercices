@@ -1,24 +1,20 @@
 /// <reference types="cypress" />
-
+import { faker } from "@faker-js/faker";
 describe("Cart", () => {
   it("Add to cart products and checkout", () => {
-    cy.visit("/");
-    cy.get('[data-test="username"]')
-      .type("standard_user")
-      .should("have.value", "standard_user");
-    cy.get('[data-test="password"]')
-      .type("secret_sauce")
-      .should("have.value", "secret_sauce");
-    cy.get('[data-test="login-button"]').click();
-    cy.url().should("include", "/inventory.html");
-    cy.get('[data-test="add-to-cart-sauce-labs-backpack"]')
-      .should("be.visible")
-      .click();
+    //authentification
+    cy.login("standard_user", "secret_sauce");
 
+    //achat produits
+    cy.url().should("include", "/inventory.html");
     cy.get('[data-test="add-to-cart-sauce-labs-bike-light"]')
       .should("be.visible")
       .click();
+    cy.get('[data-test="add-to-cart-sauce-labs-backpack"]')
+      .should("be.visible")
+      .click();
     cy.get('[data-test="shopping-cart-link"]').should("contain", 2).click();
+
     cy.get('[data-test="title"]')
       .should("be.visible")
       .and("have.text", "Your Cart");
@@ -27,11 +23,14 @@ describe("Cart", () => {
       .should("be.visible")
       .and("have.text", "Checkout")
       .click();
+
+    //authentification
     cy.get('[data-test="title"]').should("be.visible");
-    cy.get('[data-test="firstName"]').should("be.visible").type("Mohamed");
-    cy.get('[data-test="lastName"]').should("be.visible").type("ATA");
-    cy.get('[data-test="postalCode"]').should("be.visible").type("92000");
-    cy.get('[data-test="continue"]').should("contain", "Continue").click();
+    //informations utilisateurs
+    let firstName = faker.person.firstName();
+    let lastName = faker.person.lastName();
+    let zipCode = faker.location.zipCode();
+    cy.userForm(firstName, lastName, zipCode);
     cy.get('[data-test="title"]')
       .should("be.visible")
       .and("contain", "Checkout");
